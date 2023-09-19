@@ -1,0 +1,32 @@
+<title>Log In</title>
+<script src="http://code.jquery.com/jquery-3.5.1.min.js"></script>
+<p><label>User Name :</label>
+    <input type="text" name="user_name" id="user_name"></p>
+<input type="button" id="submit" value="저장">
+<div id="message"></div>
+<script>
+    var event_id="{{event_id}}";
+    var api_accounts='http://localhost:5011/api/v1/accounts/'+event_id
+    //var account_id="{{account_id}}";
+    console.log("event_id : ", event_id)
+    $(document).ready(function(){
+        $('#submit').click(function(){
+            let sendData = {
+                user_name : $('#user_name').val()
+            }
+            $.ajax({
+                type:'post',
+                url:api_accounts,
+                data:JSON.stringify(sendData),
+                contentType: "application/json; charset=utf-8",
+                dataType:'json',
+                success : function(data){
+                    $('#message').html(data);
+                    $('#submit').attr('disabled', true);
+				    let url = "/front/transfer";
+				    location.replace(url)
+                }
+		    });
+        });
+    });
+</script>
