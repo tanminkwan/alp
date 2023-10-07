@@ -25,7 +25,6 @@ class Withdraw(ExecuterInterface):
         
         if self.initial_param.get('transfer_id'):
             self.initial_param.update(dict(
-                withdraw_account_id=self.initial_param['sender'],
                 withdraw_amount=self.initial_param['transfer_amount'],
                 ))
             self._send2deposit()

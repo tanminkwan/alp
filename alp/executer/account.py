@@ -1,5 +1,6 @@
 from miniagent import db
 from miniagent.executer import ExecuterInterface
+from miniagent.adapters.rest_caller import RESTCaller
 from miniagent.common import now, local_dt_str
 
 from ..dbquery.account_queries import select_accounts, insert_account

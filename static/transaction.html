@@ -1,0 +1,191 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>MSA BANK</title>
+        <link rel="stylesheet" href="/static/assets/css/bootstrap.min.css" />
+		<link rel="stylesheet" href="/static/assets/css/LineIcons.2.0.css" />
+		<link rel="stylesheet" href="/static/assets/css/animate.css" />
+		<link rel="stylesheet" href="/static/assets/css/tiny-slider.css" />
+		<link rel="stylesheet" href="/static/assets/css/glightbox.min.css" />
+		<link rel="stylesheet" href="/static/assets/css/main.css" />
+	<script>
+		function addTransaction(){
+		
+			
+			const sendPersonEl = document.getElementById('send_person');
+			const sendAmtEl = document.getElementById('send_amt');
+		
+			if (sendPersonEl.selectedIndex == 0){
+				alert("보내실 분을 선택하세요");
+				return;
+			}
+			if (sendAmtEl.selectedIndex == 0){
+				alert("이체 금액을 선택하세요");
+				return;
+			}		
+		
+			
+			const ulElement = document.getElementById('tr_list');
+			const newLiElement = document.createElement('li');
+
+			// 대상 문자열
+			tr_html = '<i class="lni lni-checkmark-circle"></i> {amt} 원 / 출금 / {person} <div class="mt-1">거래 후 잔액: 10,000 원 </div> ';
+
+			const sendPerson = sendPersonEl.options[sendPersonEl.selectedIndex].value;
+			tr_html = tr_html.replace("{person}", sendPerson);
+
+
+			const sendAmt = sendAmtEl.options[sendAmtEl.selectedIndex].value;
+			
+			tr_html = tr_html.replace("{amt}", "- " + sendAmt);
+
+			newLiElement.innerHTML = tr_html;
+
+			ulElement.insertBefore(newLiElement, ulElement.firstChild);
+			
+			sendPersonEl.selectedIndex = 0; // 첫 번째 옵션을 선택 상태로 설정
+			
+			sendAmtEl.selectedIndex = 0; // 첫 번째 옵션을 선택 상태로 설정
+						
+			
+			
+		}
+	</script>
+  </head>
+  <body>
+
+	    <!-- Preloader -->
+    <div class="preloader">
+        <div class="preloader-inner">
+            <div class="preloader-icon">
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </div>
+ 
+ 
+   <!-- Start Pricing Table Area -->
+    <div id="pricing" class="pricing-table section">
+        <div class="container">
+
+            <div class="row">
+                <div class="col-lg-12 col-md-6 col-12">
+                    <!-- Single Table -->
+                    <div class="single-table wow fadeInUp" data-wow-delay=".2s">
+                        <!-- Table Head -->
+                        <div class="table-head">
+                            <h4 class="title">박훈 님 즐거운 하루되세요!!</h4>
+                            <div class="price">
+                                <h2 class="amount">10,000,000<h5 style="display:inline;">원</h5><span class="duration">/잔액</span></h2>
+                            </div>
+                        </div>
+                        <!-- End Table Head -->
+						
+                        <!-- Start Table Content -->
+                        <div class="table-head">
+                            <h6 class="mb-30">이체 정보</h6>
+							<div class="row mb-20">
+								<div>
+									<select class="form-select" aria-label="보내실 분" id="send_person">
+									  <option selected>보내실 분</option>
+									  <option value="이순신">이순신</option>
+									  <option value="강감찬">강감찬</option>
+									  <option value="권율">권율</option>
+									  <option value="안중근">안중근</option>
+									  <option value="이이">이이</option>
+									  <option value="세종대왕">세종대왕</option>
+									  <option value="이승복">이승복</option>
+									  <option selected>보내실 분</option>
+									  <option value="이순신">이순신</option>
+									  <option value="강감찬">강감찬</option>
+									  <option value="권율">권율</option>
+									  <option value="안중근">안중근</option>
+									  <option value="이이">이이</option>
+									  <option value="세종대왕">세종대왕</option>
+									  <option value="이승복">이승복</option>
+									  <option selected>보내실 분</option>
+									  <option value="이순신">이순신</option>
+									  <option value="강감찬">강감찬</option>
+									  <option value="권율">권율</option>
+									  <option value="안중근">안중근</option>
+									  <option value="이이">이이</option>
+									  <option value="세종대왕">세종대왕</option>
+									  <option value="이승복">이승복</option>
+									  <option selected>보내실 분</option>
+									  <option value="이순신">이순신</option>
+									  <option value="강감찬">강감찬</option>
+									  <option value="권율">권율</option>
+									  <option value="안중근">안중근</option>
+									  <option value="이이">이이</option>
+									  <option value="세종대왕">세종대왕</option>
+									  <option value="이승복">이승복</option>
+									</select>									
+								</div>
+							</div>
+							<div class="row mb-20">
+								<div>
+									<select class="form-select" aria-label="이체 금액" id="send_amt">
+									  <option selected>이체 금액</option>
+									  <option value="10,000">10,000</option>
+									  <option value="30,000">30,000</option>
+									  <option value="40,000">40,000</option>
+									</select>	
+								</div>
+							</div>							
+							<div class="row">
+								<div class="button">
+									<a href="javascript:addTransaction()" class="btn">이체하기</a>
+								</div>
+							</div>
+                        </div>
+                        <!-- End Table Content -->						
+						
+						
+                        <!-- Start Table Content -->
+                        <div class="table-content">
+                            <h6 class="mb-30">거래내역</h6>
+                            <!-- Table List -->
+                            <ul class="table-list" id="tr_list">
+								<li class="text-danger"><i class="lni lni-checkmark-circle"></i> + 50,000 원 / 출금 처리 중 / 이순신 <div class="mt-1">거래 후 잔액: 200,000 원 </div> </li>
+                                <li><i class="lni lni-checkmark-circle"></i> + 10,000 원 / 입금 / 김율 <div class="mt-1">거래 후 잔액: 10,000 원 </div> </li>
+								<li><i class="lni lni-checkmark-circle"></i> + 50,000 원 / 출금 / 이순신 <div class="mt-1">거래 후 잔액: 200,000 원 </div> </li>
+								<li><i class="lni lni-checkmark-circle"></i> + 50,000 원 / 출금 / 이순신 <div class="mt-1">거래 후 잔액: 200,000 원 </div> </li>
+                            </ul>
+                            <!-- End Table List -->
+                        </div>
+                        <!-- End Table Content -->
+                    </div>
+                    <!-- End Single Table-->
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+    <!--/ End Pricing Table Area --
+
+    <!-- ========================= JS here ========================= -->
+    <script src="assets/js/bootstrap.min.js"></script>
+    <script src="assets/js/wow.min.js"></script>
+    <script src="assets/js/tiny-slider.js"></script>
+    <script src="assets/js/glightbox.min.js"></script>
+    <script src="assets/js/count-up.min.js"></script>
+    <script src="assets/js/main.js"></script>
+    <script type="text/javascript">
+
+        //====== counter up 
+        var cu = new counterUp({
+            start: 0,
+            duration: 2000,
+            intvalues: true,
+            interval: 100,
+            append: " ",
+        });
+        cu.start();
+    </script>
+</body>
+
+</html>

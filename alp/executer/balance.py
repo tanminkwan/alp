@@ -54,8 +54,10 @@ class IncreaseBalance(ExecuterInterface):
 
         message = dict(
             account_id = deposit_account_id,
+            user_name = initial_param['deposit_user_name'],
             balance = balance,
             transaction_type = 'deposit',
+            event_id = initial_param['event_id'],
             deposit_id = initial_param['deposit_id'],
             deposit_date = initial_param['deposit_date'],
             deposit_amount = initial_param['deposit_amount'],
@@ -63,7 +65,11 @@ class IncreaseBalance(ExecuterInterface):
         )
 
         if initial_param.get('transfer_id'):
-            message.update({"transfer_id":initial_param['transfer_id']})
+            message.update(dict(
+                transfer_id = initial_param['transfer_id'],
+                withdraw_account_id = initial_param['withdraw_account_id'],
+                withdraw_user_name = initial_param['withdraw_user_name'],
+                ))
 
         return producer.produce_message(
             topic= topic,
@@ -91,16 +97,22 @@ class ReduceBalance(ExecuterInterface):
 
         message = dict(
             account_id = withdraw_account_id,
+            user_name = initial_param['withdraw_user_name'],
             balance = balance,
             transaction_type = 'withdraw',
+            event_id = initial_param['event_id'],
             withdraw_id = initial_param['withdraw_id'],
             withdraw_date = initial_param['withdraw_date'],
-            withdraw_amount = initial_param['withdraw_amount'],
+            withdraw_amount = withdraw_amount,
             create_date = now().isoformat()
         )
         
         if initial_param.get('transfer_id'):
-            message.update({"transfer_id":initial_param['transfer_id']})
+            message.update(dict(
+                transfer_id = initial_param['transfer_id'],
+                deposit_account_id = initial_param['deposit_account_id'],
+                deposit_user_name = initial_param['deposit_user_name'],
+                ))
 
         return producer.produce_message(
             topic= topic,

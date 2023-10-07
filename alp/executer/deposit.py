@@ -25,7 +25,6 @@ class Deposit(ExecuterInterface):
         
         if self.initial_param.get('transfer_id'):
             self.initial_param.update(dict(
-                deposit_account_id=self.initial_param['receiver'],
                 deposit_amount=self.initial_param['transfer_amount'],
                 ))
         

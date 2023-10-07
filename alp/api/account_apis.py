@@ -6,6 +6,8 @@ from miniagent import api, app
 from miniagent.executer import ExecuterCaller
 from datetime import timedelta
 import uuid
+import json
+import logging
 
 class Accounts(Resource):
 
@@ -33,15 +35,20 @@ class Accounts(Resource):
 
     def post(self, event_id):
 
+        args = Accounts.parser.parse_args()
+        account_id = uuid.uuid4().hex[-12:]
+        
         @after_this_request
         def set_cookie(response):
             #response.set_cookie('wts_game_account_id', uuid.uuid4().hex, max_age=300, httponly=True)
-            response.set_cookie('alp_account_id', account_id, max_age=timedelta(minutes=10), samesite=None, httponly=True)
+
+            cookie_data = dict(
+                account_id = account_id,
+                user_name = args['user_name']
+            )
+            response.set_cookie('alp_account_id', json.dumps(cookie_data), max_age=timedelta(minutes=20), samesite=None, httponly=True)
             return response
-
-        args = Accounts.parser.parse_args()
-        account_id = uuid.uuid4().hex[-12:]
-
+        
         initial_param = dict(
             user_name = args['user_name'],
             account_id = account_id,

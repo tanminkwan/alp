@@ -50,7 +50,13 @@ if 'account' in AGENT_ROLES:
 
     CUSTOM_MODELS_PATH = "alp.model"    
 
+if 'tester_bot' in AGENT_ROLES:
+    C_SLEEP_SECS = int(os.environ.get('SLEEP_SECS', '1'))
+    C_EXE_NUMBER = int(os.environ.get('EXE_NUMBER', '10'))
+
 #alp services
+CONTROL_TOWER_SERVICE_ADDRESS     = \
+    os.environ.get('CONTROL_TOWER_SERVICE_ADDRESS') or 'localhost:5010'
 ACCOUNT_SERVICE_ADDRESS     = \
     os.environ.get('ACCOUNT_SERVICE_ADDRESS') or 'localhost:5011'
 FRONT_DESK_SERVICE_ADDRESS     = \
@@ -61,8 +67,10 @@ WITHDRAW_SERVICE_ADDRESS     = \
     os.environ.get('WITHDRAW_SERVICE_ADDRESS') or 'localhost:5014'
 DEPOSIT_SERVICE_ADDRESS     = \
     os.environ.get('DEPOSIT_SERVICE_ADDRESS') or 'localhost:5015'
+BALANCE_SERVICE_ADDRESS     = \
+    os.environ.get('BALANCE_SERVICE_ADDRESS') or 'localhost:5016'
 K8S_AGENT_SERVICE_ADDRESS     = \
-    os.environ.get('K8S_AGENT_SERVICE_ADDRESS') or 'localhost:5021'
+    os.environ.get('K8S_AGENT_SERVICE_ADDRESS') or 'alp.leebalso.org'
 ELASTICSEARCH_AGENT_SERVICE_ADDRESS = \
     os.environ.get('ELASTICSEARCH_AGENT_SERVICE_ADDRESS') or 'localhost:5022'
 
@@ -70,6 +78,8 @@ C_SERVICE_ENDPOINT =\
 {
     "account":ACCOUNT_SERVICE_ADDRESS+"/api/v1",
     "transfer":TRANSFER_SERVICE_ADDRESS+"/api/v1",
+    "withdraw":WITHDRAW_SERVICE_ADDRESS+"/api/v1",
+    "deposit":DEPOSIT_SERVICE_ADDRESS+"/api/v1",
     "k8s_agent":K8S_AGENT_SERVICE_ADDRESS+"/api/v1",
     "opensearch_agent":ELASTICSEARCH_AGENT_SERVICE_ADDRESS+"/api/v1",
 }
@@ -79,6 +89,10 @@ PREWORK =\
     {
         "executer":"alp.executer.balance.Prework",
         "agent_roles":["balance"],
+    },
+    {
+        "executer":"alp.executer.tester_bot.Prework",
+        "agent_roles":["tester_bot"],
     },
 ]
 
@@ -108,4 +122,55 @@ SCHEDULED_JOBS =os.environ.get('SCHEDULED_JOBS') or schedules
 
 # job list : /scheduler/jobs
 
-C_EVENT_ID = os.environ.get('EVENT_ID') or 'eve_test'
+C_EVENT_ID = os.environ.get('EVENT_ID') or 'eve_alpha'
+
+"""
+if os.environ.get('GAME_START_DATE'):
+
+    game_start_date = datetime.fromisoformat(os.environ.get('GAME_START_DATE'))
+    #game_start_date = timezone('Asia/Seoul').localize(tmp)
+
+    C_GAME_START_DATE = max(datetime.now(timezone(TIMEZONE)), game_start_date)
+else:
+    C_GAME_START_DATE = datetime.now(timezone(TIMEZONE)) + timedelta(seconds = 10)
+"""
+# Game Duration In Seconds
+#C_GAME_DURATION = int(os.environ.get('GAME_DURATION', str(600)))
+IS_CURRENT_TRAFFIC_HIGH = False
+
+game_schedules = []
+if 'control_tower' in AGENT_ROLES:
+
+    """
+    game_schedules.append(dict(
+        executer="alp.executer.control_tower.StartGame",
+        trigger="date",
+        id="start_game",
+        name="Start Game",
+        run_date=C_GAME_START_DATE,
+        agent_roles=["control_tower"],
+    ))
+
+    game_schedules.append(dict(
+        executer="alp.executer.control_tower.EndGame",
+        trigger="date",
+        id="end_game",
+        name="end Game",
+        run_date=C_GAME_START_DATE + timedelta(seconds = C_GAME_DURATION),
+        agent_roles=["control_tower"],
+    ))
+    """
+    game_schedules.append(dict(
+        executer="alp.executer.control_tower.TransferInOut",
+        trigger="interval",
+        id="check_scaling",
+        name="Check_Scaling",
+        params=dict(
+            traffic_threshold=30,
+            secs=30
+        ),            
+        seconds=30,
+        start_date=datetime.now()+timedelta(minutes=1)
+    ))
+
+SCHEDULED_JOBS = os.environ.get('SCHEDULED_JOBS') or game_schedules

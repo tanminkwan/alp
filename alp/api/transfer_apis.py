@@ -11,8 +11,10 @@ import uuid
 class Transfers(Resource):
 
     parser = reqparse.RequestParser()
-    parser.add_argument('sender', type=str)
-    parser.add_argument('receiver', type=str)
+    parser.add_argument('withdraw_account_id', type=str)
+    parser.add_argument('withdraw_user_name', type=str)
+    parser.add_argument('deposit_account_id', type=str)
+    parser.add_argument('deposit_user_name', type=str)
     parser.add_argument('transfer_amount', type=int)
 
     def post(self, event_id):
@@ -20,8 +22,10 @@ class Transfers(Resource):
         args = Transfers.parser.parse_args()
 
         initial_param = dict(
-            sender = args['sender'],
-            receiver = args['receiver'],
+            withdraw_account_id = args['withdraw_account_id'],
+            withdraw_user_name = args['withdraw_user_name'],
+            deposit_account_id = args['deposit_account_id'],
+            deposit_user_name = args['deposit_user_name'],
             transfer_amount = args['transfer_amount'],
             event_id  = event_id
         )

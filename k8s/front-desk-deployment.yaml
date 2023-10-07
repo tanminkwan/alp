@@ -1,0 +1,48 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: front-desk-v1
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: front-desk
+      version: v1
+  template:
+    metadata:
+      labels:
+        app: front-desk
+        version: v1
+        group: alp-deploy
+      annotations:
+        proxy.istio.io/config: |-
+          proxyStatsMatcher:
+            inclusionRegexps:
+            - ".*"
+    spec:
+      containers:
+      - name: front-desk
+        image: tanminkwan/alp-miniagent:latest
+        imagePullPolicy: Always
+        env:
+          - name: RUN_TYPE
+            value: "SERVICE"
+          - name: AGENT_NAME
+            value: "front_desk"
+          - name: AGENT_ROLES
+            value: "front_desk"
+          - name: C_EVENT_ID
+            value: "eve_test"
+          - name: COMMAND_RECEIVER_ENABLED
+            value: "false"
+          - name: MESSAGE_RECEIVER_ENABLED
+            value: "false"
+          - name: ZIPKIN_DOMAIN_NAME
+            value: zipkin.infra.svc.cluster.local
+          - name: ZIPKIN_PORT
+            value: "29411"
+          - name: ELASTICSEARCH_AGENT_SERVICE_ADDRESS
+            value: opensearch-agent:5000
+        ports:
+          - protocol: TCP
+            containerPort: 5000

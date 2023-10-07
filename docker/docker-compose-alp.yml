@@ -1,0 +1,18 @@
+version: '3.8'
+services:
+  front-desk:
+    image: tanminkwan/alp-miniagent:latest
+    container_name: front-desk
+    ports:
+      - 5012:5000
+    environment:
+      DEBUG: true
+      RUN_TYPE: "SERVICE"
+      AGENT_NAME: "front_desk"
+      AGENT_ROLES: "front_desk"
+      EVENT_ID: "eve_alpha"
+      MESSAGE_RECEIVER_ENABLED :  false
+      ZIPKIN_DOMAIN_NAME: 172.17.0.1
+      ZIPKIN_PORT: 9411
+      KAFKA_BOOTSTRAP_SERVERS: "172.17.0.1:9092"
+      ELASTICSEARCH_AGENT_SERVICE_ADDRESS: "172.17.0.1:5022"

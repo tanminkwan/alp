@@ -10,6 +10,7 @@ class Deposits(Resource):
 
     parser = reqparse.RequestParser()
     parser.add_argument('deposit_account_id', type=str)
+    parser.add_argument('deposit_user_name', type=str)
     parser.add_argument('deposit_amount', type=int)
 
     def post(self, event_id):
@@ -18,6 +19,7 @@ class Deposits(Resource):
 
         initial_param = dict(
             deposit_account_id = args['deposit_account_id'],
+            deposit_user_name = args['deposit_user_name'],
             deposit_amount = args['deposit_amount'],
             event_id  = event_id
         )

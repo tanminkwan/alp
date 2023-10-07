@@ -2,3 +2,4 @@ miniagent==0.0.28
 PyYAML==6.0
 redis==5.0.0
 python-redis-lock==4.0.0
+matplotlib==3.8.0

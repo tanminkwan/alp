@@ -1,0 +1,39 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: tester-bot
+spec:
+  template:
+    metadata:
+      labels:
+        app: tester-bot
+        version: v1
+        group: alp-jobs
+    spec:
+      containers:
+      - name: tester-bot
+        image: tanminkwan/alp-miniagent:latest
+        env:
+          - name: RUN_TYPE
+            value: "APP"
+          - name: AGENT_NAME
+            value: "tester_bot"
+          - name: AGENT_ROLES
+            value: "tester_bot"
+          - name: COMMAND_RECEIVER_ENABLED
+            value: "false"
+          - name: MESSAGE_RECEIVER_ENABLED
+            value: "false"
+          - name: ZIPKIN_DOMAIN_NAME
+            value: zipkin.infra.svc.cluster.local
+          - name: ZIPKIN_PORT
+            value: "29411"
+          - name: TRANSFER_SERVICE_ADDRESS
+            value: transfer:5000
+          - name: SLEEP_SECS
+            value: "1"
+          - name: EXE_NUMBER
+            value: "10"
+      restartPolicy: OnFailure
+    backoffLimit: 4
+  parallelism: 1
