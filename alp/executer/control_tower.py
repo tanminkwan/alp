@@ -6,6 +6,8 @@ import yaml
 from pathlib import Path
 from . import _get_url
 
+from pprint import pprint
+
 def _create_k8s_job(rest_caller, job_name, parallelism, env_params):
 
     url = "http://"+_get_url('k8s_agent')+"/k8s/jobs/alp"
@@ -29,11 +31,28 @@ def _create_k8s_job(rest_caller, job_name, parallelism, env_params):
 
     job_dict = {"job":yaml_dict}
 
+    pprint(job_dict)
     try:
         rtn, result = rest_caller.call_post(
                             url=url, 
                             json=job_dict
                         )
+    except Exception as e:
+        message = "Exception : " + e.__str__()
+        logging.error(message)
+        return -1, {"error":message}
+            
+    if rtn == 200:
+        return 1, result
+    else:
+        return -1, {"error":result}
+
+def _delete_k8s_job(rest_caller, job_name):
+
+    url = "http://"+_get_url('k8s_agent')+"/k8s/job/alp/" + job_name
+
+    try:
+        rtn, result = rest_caller.call_delete(url=url)
     except Exception as e:
         message = "Exception : " + e.__str__()
         logging.error(message)
@@ -210,7 +229,16 @@ class OpenFront(ExecuterInterface):
                         ) -> tuple[int, dict]:
 
         return _patch_k8s_virtualservice(rest_caller, 'alp-external-virtualservice-open')
-    
+
+class OpenV2Front(ExecuterInterface):
+
+    def execute_command(self, 
+                            initial_param: dict,
+                            rest_caller: RESTCaller,
+                        ) -> tuple[int, dict]:
+
+        return _patch_k8s_virtualservice(rest_caller, 'alp-external-virtualservice-openv2')
+
 class CloseFront(ExecuterInterface):
 
     def execute_command(self, 
@@ -264,18 +292,15 @@ class TransferInOut(ExecuterInterface):
 
 class TesterBot(ExecuterInterface):
 
-    def _set_env_params(self, initial_param):
-
-        env_params = initial_param.copy()
-
-        return env_params
-
     def execute_command(self, 
                             initial_param: dict,
                             rest_caller: RESTCaller,
                         ) -> tuple[int, dict]:
 
-        parallelism = initial_param['parallelism'],
-        env_params = initial_param['env_params']
+        if initial_param.get('env_params'):
+            parallelism = initial_param['parallelism']
+            env_params = initial_param['env_params']
 
-        return _create_k8s_job(rest_caller, 'tester-bot-', parallelism, env_params)
+            return _create_k8s_job(rest_caller, 'tester-bot', parallelism, env_params)
+        else:
+            return _delete_k8s_job(rest_caller, 'tester-bot')

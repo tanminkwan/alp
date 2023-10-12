@@ -8,6 +8,7 @@ from miniagent.event_receiver import Resource
 from datetime import datetime, timedelta
 import uuid
 import json
+import logging
 
 import base64
 from io import BytesIO
@@ -18,10 +19,12 @@ from matplotlib import rcParams
 @app.route('/front/join_game')
 def join_game_page():
     
-    account = request.cookies.get('alp_account_id')
+    #account = request.cookies.get('alp_account_id')
+    account = request.cookies.get('account_id')
     #expires = request.cookies.get('alp_account_id_expires')
     event_id = configure['C_EVENT_ID']
 
+    logging.warning(account)
     if not account:
         #account_id = uuid.uuid4().hex[-12:]
         #resp = make_response(render_template('join_game.html',event_id=event_id))
@@ -35,17 +38,32 @@ def join_game_page():
 @app.route('/front/transfer')
 def transfer_page():
 
+    front_version = configure['C_FRONT_VERSION']
     event_id = configure['C_EVENT_ID']
-    account_str = request.cookies.get('alp_account_id')
-    if not account_str:
-        return redirect("/front/join_game")
+    #account_str = request.cookies.get('alp_account_id')
+    #logging.error(account_str)
+    #if not account_str:
+    #    return redirect("/front/join_game")
+
+    account_id = request.cookies.get('account_id')
+    user_name = request.cookies.get('user_name')
     
+    """
     account_dict = json.loads(account_str)
     resp = make_response(render_template('transfer.html',
                                          event_id=event_id, 
                                          account_id=account_dict['account_id'],
                                          user_name=account_dict['user_name'],
+                                         version=front_version
                                          ))
+    """
+    resp = make_response(render_template('transfer.html',
+                                         event_id=event_id, 
+                                         account_id=account_id,
+                                         user_name=account_id,
+                                         version=front_version
+                                         ))
+
     return resp
 
 @app.route("/front/stat")

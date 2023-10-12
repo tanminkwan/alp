@@ -19,7 +19,9 @@ Author: GrayGrids
     /*=====================================
     Sticky
     ======================================= */
+	
     window.onscroll = function () {
+		/*
         var header_navbar = document.querySelector(".navbar-area");
         var sticky = header_navbar.offsetTop;
 
@@ -39,6 +41,7 @@ Author: GrayGrids
         } else {
             backToTo.style.display = "none";
         }
+		*/
     };
 
 
@@ -107,9 +110,7 @@ Author: GrayGrids
 
     //===== mobile-menu-btn
     let navbarToggler = document.querySelector(".mobile-menu-btn");
-    navbarToggler.addEventListener('click', function () {
-        navbarToggler.classList.toggle("active");
-    });
+    
 
 
 })();

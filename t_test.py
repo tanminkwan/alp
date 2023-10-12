@@ -3,27 +3,25 @@ import uuid
 import random
 from time import sleep
 
-r = requests.put('http://localhost:5017/api/v1/route/open')
-#r = requests.put('http://localhost:5017/api/v1/scale/k8sh/1')
+
+j_dict = dict(
+    event_id = 'eve_aaaa',
+    parallelism = 3,
+    exe_number = 100,
+    sleep_secs = 2,
+)
+
+r = requests.put('http://alp.leebalso.org/api/v1/route/open')
+#r = requests.put('http://alp.leebalso.org/api/v1/route/openv2')
+#r = requests.put('http://alp.leebalso.org/api/v1/scale/k8sh/1')
+#r = requests.post('http://alp.leebalso.org/api/v1/transfers/eve_1111', json=j_dict)
+#r = requests.post('http://alp.leebalso.org/api/v1/testerbot', json=j_dict)
+#r = requests.delete('http://alp.leebalso.org/api/v1/testerbot')
 
 print(r.headers)
 print(r.text)
 
 """
-
-j_dict = dict(
-    withdraw_account_id = 'aaaa',
-    withdraw_user_name = 'kim',
-    deposit_account_id = 'aaaa',
-    deposit_user_name = 'kim',
-    transfer_amount = 100
-)
-
-r = requests.post('http://www.leebalso.org/api/v1/transfers/eve_1111', json=j_dict)
-
-print(r.headers)
-print(r.text)
-
 
 import redis
 import redis_lock

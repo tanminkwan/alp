@@ -2,7 +2,7 @@ from flask import request, make_response, after_this_request
 from flask_restful import reqparse
 from miniagent.event_receiver import Resource
 from flask_api import status
-from miniagent import api, app
+from miniagent import api, configure
 from miniagent.executer import ExecuterCaller
 from datetime import timedelta
 import uuid
@@ -46,7 +46,8 @@ class Accounts(Resource):
                 account_id = account_id,
                 user_name = args['user_name']
             )
-            response.set_cookie('alp_account_id', json.dumps(cookie_data), max_age=timedelta(minutes=20), samesite=None, httponly=True)
+            valid_period = configure['C_VALID_PERIOD'] if configure.get('C_VALID_PERIOD') else 20
+            response.set_cookie('alp_account_id', json.dumps(cookie_data), max_age=timedelta(minutes=valid_period), samesite=None, httponly=True)
             return response
         
         initial_param = dict(

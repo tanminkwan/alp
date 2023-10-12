@@ -11,6 +11,10 @@ spec:
   - match:
     - uri:
         prefix: /api/v1/route
+    - uri:
+        prefix: /api/v1/testerbot
+    - uri:
+        prefix: /api/v1/scale
     route:
     - destination:
         host: control-tower
@@ -42,6 +46,14 @@ spec:
           number: 5000
   - match:
     - uri:
+        prefix: /api/v1/deposit
+    route:
+    - destination:
+        host: deposit
+        port:
+          number: 5000
+  - match:
+    - uri:
         prefix: /api/v1/account
     route:
     - destination:
@@ -51,6 +63,8 @@ spec:
   - match:
     - uri:
         prefix: /static
+    - uri:
+        prefix: /dashboard
     route:
     - destination:
         host: static-site
@@ -62,8 +76,16 @@ spec:
     route:
     - destination:
         host: front-desk
+        subset: v1
         port:
           number: 5000
+      weight: 90
+    - destination:
+        host: front-desk
+        subset: v2
+        port:
+          number: 5000
+      weight: 10
   - match:
     - uri:
         regex: "^$|^/$"

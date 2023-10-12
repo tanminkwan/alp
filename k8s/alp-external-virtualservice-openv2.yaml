@@ -73,12 +73,26 @@ spec:
   - match:
     - uri:
         prefix: /front
+    route:
+    - destination:
+        host: front-desk
+        subset: v1
+        port:
+          number: 5000
+      weight: 0
+    - destination:
+        host: front-desk
+        subset: v2
+        port:
+          number: 5000
+      weight: 100
+  - match:
     - uri:
         regex: "^$|^/$"
     route:
     - destination:
-        host: static-site
+        host: front-desk
         port:
           number: 5000
     rewrite:
-      uri: /nogame
+      uri: /front/join_game

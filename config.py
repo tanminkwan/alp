@@ -45,6 +45,7 @@ logging.warning("AGENT_ROLES : "+AGENT_ROLES)
 CUSTOM_APIS_PATH = "alp.api"
 
 if 'account' in AGENT_ROLES:
+    C_VALID_PERIOD = int(os.environ.get('VALID_PERIOD', '20'))
     base_dir = os.path.abspath(os.path.dirname(__file__))
     SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(base_dir, AGENT_NAME+'.db')
 
@@ -53,6 +54,9 @@ if 'account' in AGENT_ROLES:
 if 'tester_bot' in AGENT_ROLES:
     C_SLEEP_SECS = int(os.environ.get('SLEEP_SECS', '1'))
     C_EXE_NUMBER = int(os.environ.get('EXE_NUMBER', '10'))
+
+if 'front_desk' in AGENT_ROLES:
+    C_FRONT_VERSION = os.environ.get('FRONT_VERSION', 'v1')
 
 #alp services
 CONTROL_TOWER_SERVICE_ADDRESS     = \

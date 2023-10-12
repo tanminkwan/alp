@@ -4,19 +4,28 @@ from miniagent import api
 from miniagent.executer import ExecuterCaller
 from miniagent.event_receiver import Resource
 
-class Front(Resource):
+class TesterBot(Resource):
 
     parser = reqparse.RequestParser()
     parser.add_argument('event_id', type=str)
+    parser.add_argument('parallelism', type=int)
+    parser.add_argument('exe_number', type=int)
+    parser.add_argument('sleep_secs', type=int)
 
     def post(self):
 
-        args = Front.parser.parse_args()
+        args = TesterBot.parser.parse_args()
+
         data = dict(
-            command = 'create',
-            deployment = 'front_desk',
-            event_id = args['event_id'],
-            executer = 'alp.executer.control_tower.Deployment',
+            initial_param = dict(
+                env_params = dict(
+                    event_id = args['event_id'],
+                    exe_number = args['exe_number'],
+                    sleep_secs = args['sleep_secs'],
+                ),
+                parallelism = args['parallelism'],
+            ),
+            executer = 'alp.executer.control_tower.TesterBot',
         )
 
         rtn, rtn_message = ExecuterCaller.instance().execute_command(data)
@@ -33,9 +42,8 @@ class Front(Resource):
     def delete(self):
 
         data = dict(
-            command = 'delete',
-            deployment = 'front_desk',
-            executer = 'alp.executer.control_tower.Deployment',
+            initial_param = dict(),
+            executer = 'alp.executer.control_tower.TesterBot',
         )
 
         rtn, rtn_message = ExecuterCaller.instance().execute_command(data)
@@ -83,6 +91,8 @@ class Route(Resource):
 
         if command=='open':
             executer = 'alp.executer.control_tower.OpenFront'
+        elif command=='openv2':
+            executer = 'alp.executer.control_tower.OpenV2Front'
         elif command=='close':
             executer = 'alp.executer.control_tower.CloseFront'
         else:
@@ -106,5 +116,7 @@ class Route(Resource):
 
     put.permitted_roles = ["control_tower"]
 
+
+api.add_resource(TesterBot, '/testerbot', endpoint='testerbot')
 api.add_resource(Route, '/route/<string:command>', endpoint='route')
 api.add_resource(Scale, '/scale/<string:deployment>/<int:replicas>', endpoint='scale')

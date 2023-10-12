@@ -3,6 +3,7 @@ kind: Job
 metadata:
   name: tester-bot
 spec:
+  parallelism: 1
   template:
     metadata:
       labels:
@@ -30,10 +31,10 @@ spec:
             value: "29411"
           - name: TRANSFER_SERVICE_ADDRESS
             value: transfer:5000
-          - name: SLEEP_SECS
-            value: "1"
-          - name: EXE_NUMBER
-            value: "10"
+#          - name: SLEEP_SECS
+#            value: "1"
+#          - name: EXE_NUMBER
+#            value: "10"
+#          - name: EVENT_ID
+#            value: "a111"
       restartPolicy: OnFailure
-    backoffLimit: 4
-  parallelism: 1

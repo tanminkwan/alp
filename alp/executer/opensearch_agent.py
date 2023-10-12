@@ -16,6 +16,12 @@ class Query(ExecuterInterface):
         
         return 1, {"results":q}
 
+    def _parcer4paggs(self, response):
+
+        q = response.get('aggregations').get('paggs').get('buckets')
+        
+        return 1, {"results":q}
+
     def _parcer4aggs(self, response):
 
         q = response.get('aggregations')
@@ -89,6 +95,18 @@ class Query(ExecuterInterface):
             }
             query.update(aggs)
             parcer = self._parcer4groupby
+
+        elif initial_param.get('paggs'):
+
+            aggs =\
+            {
+                "aggs":{
+                    "paggs":initial_param['paggs']
+                }
+            }
+            query.update(aggs)
+            logging.error(str(query))
+            parcer = self._parcer4paggs
 
         elif initial_param.get('aggs'):
 
