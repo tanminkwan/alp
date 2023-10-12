@@ -10,11 +10,9 @@
 		<link rel="stylesheet" href="/static/assets/css/tiny-slider.css" />
 		<link rel="stylesheet" href="/static/assets/css/glightbox.min.css" />
 		<link rel="stylesheet" href="/static/assets/css/main.css" />
-	<script>
-	
-	
+	<script>	
 
-		//var cookies = document.cookie.split(";");
+		var cookies = document.cookie.split(";");
 		var event_id="{{event_id}}";    
     	var account_id="{{account_id}}";
     	var user_name="{{user_name}}";
@@ -27,6 +25,15 @@
 		var last_transfer_amt = 0;		
 		
 		cookies.forEach(item=>{
+
+			//쿠키 있으면 조회 화면 이동
+			if (item.split("=")[0].trim() == "user_name"){
+				user_name = item.split("=")[1];
+			};
+			if (item.split("=")[0].trim() == "account_id"){
+				account_id = item.split("=")[1];
+			};
+
 			//20231011 마지막 거래 
 			if (item.split("=")[0].trim() == "last_transfer_id"){
 				last_transfer_id = item.split("=")[1];

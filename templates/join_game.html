@@ -19,15 +19,15 @@
 		var account_id = "";
 	
 		//쿠키 조회 
-		//var cookies = document.cookie.split(";");
-		//var user_name = "";
-		//cookies.forEach(item=>{
-		//	//쿠키 있으면 조회 화면 이동
-		//	if (item.split("=")[0].trim() == "user_name"){
-		//		window.location.href = "/transaction";
-		//		return;
-		//	};
-		//});	
+		var cookies = document.cookie.split(";");
+		var user_name = "";
+		cookies.forEach(item=>{
+			//쿠키 있으면 조회 화면 이동
+			if (item.split("=")[0].trim() == "user_name"){
+				window.location.href = "front/transfer";
+				return;
+			};
+		});	
 	
 		function goTran(){
 		
@@ -78,11 +78,11 @@
 					account_id = data["account_id"];
 				}
 				// 쿠키를 설정합니다.
-				//var expirationDate = new Date();
-				//expirationDate.setDate(expirationDate.getDate() + 2); // 30일 후 만료
-				//var cookiePath = "/";
-				//document.cookie = "user_name=" + user_name + "; expires=" + expirationDate.toUTCString() + "; path=" + cookiePath;				
-				//document.cookie = "account_id=" + account_id + "; expires=" + expirationDate.toUTCString() + "; path=" + cookiePath;				
+				var expirationDate = new Date();
+				expirationDate.setDate(expirationDate.getDate() + 2); // 30일 후 만료
+				var cookiePath = "/";
+				document.cookie = "user_name=" + user_name + "; expires=" + expirationDate.toUTCString() + "; path=" + cookiePath;				
+				document.cookie = "account_id=" + account_id + "; expires=" + expirationDate.toUTCString() + "; path=" + cookiePath;				
 				
 				//입금 처리 
 				deposit();

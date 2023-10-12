@@ -47,7 +47,10 @@ def transfer_page():
 
     account_id = request.cookies.get('account_id')
     user_name = request.cookies.get('user_name')
-    
+
+    if not account_id:
+        return redirect("/front/join_game")
+
     """
     account_dict = json.loads(account_str)
     resp = make_response(render_template('transfer.html',
@@ -60,7 +63,7 @@ def transfer_page():
     resp = make_response(render_template('transfer.html',
                                          event_id=event_id, 
                                          account_id=account_id,
-                                         user_name=account_id,
+                                         user_name=user_name,
                                          version=front_version
                                          ))
 

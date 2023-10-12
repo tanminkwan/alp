@@ -113,6 +113,41 @@
 	
 	<script>
 	
+	function generateColorCode(input) {
+    // Ensure input is a Unicode string
+    if (typeof input === 'string') {
+        // Define a simple hash function
+        function simpleHash(str) {
+            let hash = 0;
+
+            if (str.length === 0) {
+                return hash;
+            }
+
+            for (let i = 0; i < str.length; i++) {
+                const char = str.charCodeAt(i);
+                hash = (hash << 5) - hash + char;
+            }
+
+            hash = Math.abs(hash);
+
+            return hash % 10000;
+        }
+
+        // Generate a color code based on the input
+        const colorValue = simpleHash(input);
+
+        // Restrict colorValue to a range between 1000 and 9000
+    	const restrictedValue = Math.max(500, Math.min(9500, colorValue));
+
+        const colorCode = '#' + restrictedValue.toString(16).padStart(3, '0'); // Convert to hex and ensure 3 digits
+
+        return colorCode;
+    } else {
+        throw new Error("Input must be a Unicode string.");
+    }
+}
+
 		const  backgroundColorArr = [
 		  'rgba(255, 99, 132, 0.2)',
 		  'rgba(255, 159, 64, 0.2)',
@@ -185,9 +220,23 @@
 				var idx = 0;
 				for (var i=0; i < dataArray.length; i++){
 					if (backgroundColorArr.length == idx) idx = 0;
-						backgroundColorArray.push(backgroundColorArr[idx]);
-						borderColorArray.push(borderColorArr[idx]);
-					
+
+						//backgroundColorArray.push(backgroundColorArr[idx]);
+						//var last3 = encodeURI(labelArray[i]).replaceAll('%', '');
+
+						//var seed = simpleHash(last3);
+						//console.log(labelArray[i])
+						//console.log(last3)
+						//console.log(seed)
+      
+                        // Generate a random color for the shape
+                        var backColor = generateColorCode(labelArray[i]);
+						var borderColor = generateColorCode(labelArray[i]);
+						backgroundColorArray.push(backColor);
+						borderColorArray.push(borderColor);
+
+						console.log(backColor)
+
 					idx++;
 					
 				}
@@ -250,7 +299,7 @@
 		go();
 
 		//5초에 한번씩 호출
-		setInterval(go, 5000);
+//		setInterval(go, 10000);
 	
 
 			
