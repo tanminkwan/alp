@@ -79,13 +79,13 @@ spec:
         subset: v1
         port:
           number: 5000
-      weight: 90
+      weight: 100
     - destination:
         host: front-desk
         subset: v2
         port:
           number: 5000
-      weight: 10
+      weight: 0
   - match:
     - uri:
         regex: "^$|^/$"

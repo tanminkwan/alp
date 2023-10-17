@@ -108,16 +108,11 @@
 	
     <!-- ========================= JS here ========================= -->
     <script src="/static/assets/js/bootstrap.min.js"></script>
-    <script src="/static/assets/js/Chart.min.js"></script>
-	
-	
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.4"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@0.7.0"></script>	
 	<script>
 	
-	function generateColorCode(input) {
-    // Ensure input is a Unicode string
-    if (typeof input === 'string') {
-        // Define a simple hash function
-        function simpleHash(str) {
+    function simpleHash(str) {
             let hash = 0;
 
             if (str.length === 0) {
@@ -131,41 +126,73 @@
 
             hash = Math.abs(hash);
 
-            return hash % 10000;
-        }
-
-        // Generate a color code based on the input
-        const colorValue = simpleHash(input);
-
-        // Restrict colorValue to a range between 1000 and 9000
-    	const restrictedValue = Math.max(500, Math.min(9500, colorValue));
-
-        const colorCode = '#' + restrictedValue.toString(16).padStart(3, '0'); // Convert to hex and ensure 3 digits
-
-        return colorCode;
-    } else {
-        throw new Error("Input must be a Unicode string.");
+            return hash % 30;
     }
-}
 
-		const  backgroundColorArr = [
-		  'rgba(255, 99, 132, 0.2)',
-		  'rgba(255, 159, 64, 0.2)',
-		  'rgba(255, 205, 86, 0.2)',
-		  'rgba(75, 192, 192, 0.2)',
-		  'rgba(54, 162, 235, 0.2)',
-		  'rgba(153, 102, 255, 0.2)',
-		  'rgba(201, 203, 207, 0.2)'
-		];
+        var borderColorArr = [
+        'rgba(229, 115, 115, 1)',
+    'rgba(240, 98, 146, 1)',
+    'rgba(206, 147, 216, 1)',
+    'rgba(149, 117, 205, 1)',
+    'rgba(121, 134, 203, 1)',
+    'rgba(100, 181, 246, 1)',
+    'rgba(79, 195, 247, 1)',
+    'rgba(77, 208, 225, 1)',
+    'rgba(77, 182, 172, 1)',
+    'rgba(129, 199, 132, 1)',
+    'rgba(174, 213, 129, 1)',
+    'rgba(220, 231, 117, 1)',
+    'rgba(255, 241, 118, 1)',
+    'rgba(255, 213, 79, 1)',
+    'rgba(255, 183, 77, 1)',
+    'rgba(255, 138, 101, 1)',
+    'rgba(161, 136, 127, 1)',
+    'rgba(224, 224, 224, 1)',
+    'rgba(144, 164, 174, 1)',
+    'rgba(146, 43, 33, 1)',
+    'rgba(99, 57, 116, 1)',
+    'rgba(26, 82, 118, 1)',
+    'rgba(14, 102, 85, 1)',
+    'rgba(29, 131, 72, 1)',
+    'rgba(154, 125, 10, 1)',
+    'rgba(156, 100, 12, 1)',
+    'rgba(135, 54, 0, 1)',
+    'rgba(95, 106, 106, 1)',
+    'rgba(33, 47, 60, 1)',
+    'rgba(23, 32, 42, 1)'
+];
 		
-		const borderColorArr =  [
-		  'rgb(255, 99, 132)',
-		  'rgb(255, 159, 64)',
-		  'rgb(255, 205, 86)',
-		  'rgb(75, 192, 192)',
-		  'rgb(54, 162, 235)',
-		  'rgb(153, 102, 255)',
-		  'rgb(201, 203, 207)'
+		const backgroundColorArr =  [
+        'rgba(229, 115, 115, 0.3)',
+    'rgba(240, 98, 146, 0.3)',
+    'rgba(206, 147, 216, 0.3)',
+    'rgba(149, 117, 205, 0.3)',
+    'rgba(121, 134, 203, 0.3)',
+    'rgba(100, 181, 246, 0.3)',
+    'rgba(79, 195, 247, 0.3)',
+    'rgba(77, 208, 225, 0.3)',
+    'rgba(77, 182, 172, 0.3)',
+    'rgba(129, 199, 132, 0.3)',
+    'rgba(174, 213, 129, 0.3)',
+    'rgba(220, 231, 117, 0.3)',
+    'rgba(255, 241, 118, 0.3)',
+    'rgba(255, 213, 79, 0.3)',
+    'rgba(255, 183, 77, 0.3)',
+    'rgba(255, 138, 101, 0.3)',
+    'rgba(161, 136, 127, 0.3)',
+    'rgba(224, 224, 224, 0.3)',
+    'rgba(144, 164, 174, 0.3)',
+    'rgba(146, 43, 33, 0.3)',
+    'rgba(99, 57, 116, 0.3)',
+    'rgba(26, 82, 118, 0.3)',
+    'rgba(14, 102, 85, 0.3)',
+    'rgba(29, 131, 72, 0.3)',
+    'rgba(154, 125, 10, 0.3)',
+    'rgba(156, 100, 12, 0.3)',
+    'rgba(135, 54, 0, 0.3)',
+    'rgba(95, 106, 106, 0.3)',
+    'rgba(33, 47, 60, 0.3)',
+    'rgba(23, 32, 42, 0.3)'
 		]	
 		
 		var dataArray = new Array();
@@ -207,8 +234,11 @@
 				data.forEach(item=>{
 				
 					if (item["key"] != ""){
-						labelArray.push(item["key"]);
-						dataArray.push(item["doc_count"]);
+
+						if (currentUserCnt < 12){
+							labelArray.push(item["key"]);
+							dataArray.push(item["doc_count"]);
+						}
 						currentUserCnt ++;
 						totalTrAmt += item["deposit_amount"]["value"] + item["withdraw_amount"]["value"];
 						totalTrCnt += item["doc_count"];
@@ -221,17 +251,8 @@
 				for (var i=0; i < dataArray.length; i++){
 					if (backgroundColorArr.length == idx) idx = 0;
 
-						//backgroundColorArray.push(backgroundColorArr[idx]);
-						//var last3 = encodeURI(labelArray[i]).replaceAll('%', '');
-
-						//var seed = simpleHash(last3);
-						//console.log(labelArray[i])
-						//console.log(last3)
-						//console.log(seed)
-      
-                        // Generate a random color for the shape
-                        var backColor = generateColorCode(labelArray[i]);
-						var borderColor = generateColorCode(labelArray[i]);
+                        var backColor = backgroundColorArr[simpleHash(labelArray[i])];
+						var borderColor = borderColorArr[simpleHash(labelArray[i])];
 						backgroundColorArray.push(backColor);
 						borderColorArray.push(borderColor);
 
@@ -256,7 +277,7 @@
 				  }
 
 				  chart_obj = new Chart(ctx, {
-					type: 'bar',
+					type: 'horizontalBar',
 					data: {
 					  labels: labelArray,
 					  datasets: [{
@@ -268,19 +289,36 @@
 					  }]
 					},
 					options: {
-					  scales: {
-							yAxes : [ {
-								ticks : {
-									beginAtZero : true, // 0부터 시작하게 합니다.
-									stepSize: 1   // 1 씩 증가하도록 설정합니다.
-								}
-							} ]
-					  }
-					}
-				  });
-				
-				  	
-				
+                        scales: {
+            yAxes: [{
+          display: false, // Hide y-axis labels
+          ticks: {
+            beginAtZero: true, 
+            stepSize: 1  
+          }
+        }],
+            xAxes: [{
+              ticks: {
+                beginAtZero: true, 
+                stepSize: 1  
+              }
+            }]
+          },
+          plugins: {
+            datalabels: {
+			  anchor: 'center',
+              align: 'right',
+              formatter: function(value, context) {
+                return labelArray[context.dataIndex] + ': ' + value;
+              },
+              font: {
+                size: 24 // Set the font size to 16 pixels
+              }
+            }
+          }
+
+                    			}
+				  });		
 				
 			})
 			.catch(function(error) {

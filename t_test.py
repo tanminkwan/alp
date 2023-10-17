@@ -11,6 +11,7 @@ j_dict = dict(
     sleep_secs = 2,
 )
 
+#r = requests.put('http://alp.leebalso.org/api/v1/route/close')
 r = requests.put('http://alp.leebalso.org/api/v1/route/open')
 #r = requests.put('http://alp.leebalso.org/api/v1/route/openv2')
 #r = requests.put('http://alp.leebalso.org/api/v1/scale/k8sh/1')

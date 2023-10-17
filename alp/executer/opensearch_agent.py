@@ -87,7 +87,8 @@ class Query(ExecuterInterface):
                 "aggs":{
                     "groupby":{
                         "terms":{
-                            "field": initial_param['groupby']+".keyword"
+                            "field": initial_param['groupby']+".keyword",
+                            "size": 1000
                         },
                         "aggs": initial_param['aggs']
                     }

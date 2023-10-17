@@ -11,3 +11,9 @@ spec:
   - name: v2
     labels:
       version: v2 # label attached to Pod definition
+#  trafficPolicy:
+#    loadBalancer:
+#      consistentHash:
+#        httpCookie:
+#          name: account_id
+#          ttl: 0s
