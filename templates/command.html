@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Control Panel</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 50px;
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            margin: 10px;
+            cursor: pointer;
+            border: none;
+            background-color: #4CAF50;
+            color: white;
+            border-radius: 5px;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        .button-container {
+            margin-bottom: 20px;
+        }
+
+        .button-container button {
+            margin: 5px;
+        }
+    </style>
+    <script>
+
+        function sendRequest(method, url, data, callback) {
+            var xhr = new XMLHttpRequest();
+            xhr.open(method, url, true);
+            xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+            xhr.onload = function () {
+                if (xhr.status >= 200 && xhr.status < 400) {
+                    callback(JSON.parse(xhr.responseText));
+                }
+            };
+            xhr.send(JSON.stringify(data));
+        }
+
+        function closeSite() {
+            sendRequest('PUT', '/api/v1/route/close', {}, function (response) {
+                console.log(response);
+                setStatus(response.message);
+            });
+        }
+
+        function openBlueSite() {
+            sendRequest('PUT', '/api/v1/route/open', {}, function (response) {
+                console.log(response);
+                setStatus(response.message);
+            });
+        }
+
+        function openGreenSite() {
+            sendRequest('PUT', '/api/v1/route/openv2', {}, function (response) {
+                console.log(response);
+                setStatus(response.message);
+            });
+        }
+
+        function runTesterBot() {
+            var jsonData = {
+                event_id: 'eve_bot',
+                parallelism: 3,
+                exe_number: 100,
+                sleep_secs: 2
+            };
+
+            sendRequest('POST', '/api/v1/testerbot', jsonData, function (response) {
+                console.log(response);
+                setStatus(response.message);
+            });
+        }
+
+        function deleteTesterBot() {
+            sendRequest('DELETE', '/api/v1/testerbot', {}, function (response) {
+                console.log(response);
+                setStatus(response.message);
+            });
+        }
+
+        function setStatus(message) {
+            var statusElement = document.getElementById('status');
+            statusElement.innerHTML = message;
+        }
+        
+    </script>
+</head>
+<body>
+    <div class="button-container" id="div1">
+        <button onclick="closeSite()">Close Site</button>
+        <button onclick="openBlueSite()">Open Blue Site</button>
+        <button onclick="openGreenSite()">Open Green Site</button>
+    </div>
+    <div class="button-container" id="div2">
+        <button onclick="runTesterBot()">Run Tester-Bot</button>
+        <button onclick="deleteTesterBot()">Delete Tester-Bot</button>
+    </div>
+    <div class="status" id="status"></div>
+</body>
+</html>

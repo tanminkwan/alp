@@ -20,7 +20,7 @@ from matplotlib import rcParams
 def join_game_page():
     
     #account = request.cookies.get('alp_account_id')
-    account = request.cookies.get('account_id')
+    account = request.cookies.get('c_account_id')
     #expires = request.cookies.get('alp_account_id_expires')
     event_id = configure['C_EVENT_ID']
 
@@ -45,7 +45,7 @@ def transfer_page():
     #if not account_str:
     #    return redirect("/front/join_game")
 
-    account_id = request.cookies.get('account_id')
+    account_id = request.cookies.get('c_account_id')
     user_name = request.cookies.get('user_name')
 
     if not account_id:

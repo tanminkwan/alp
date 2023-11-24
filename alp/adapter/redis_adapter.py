@@ -11,7 +11,8 @@ class RedisCaller(Adapter):
         if not add:
             add = 0
 
-        with redis_lock.Lock(redis_conn, "tiffanie"):
+        with redis_lock.Lock(redis_conn, key+"_lock"):
+            
             p = redis_conn.get(key)
 
             if p:

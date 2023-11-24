@@ -272,7 +272,7 @@ class TransferInOut(ExecuterInterface):
         
         rtn, result = rest_caller.call_get(url=url)
 
-        if rtn!=200 or not result.get('value'):
+        if rtn!=200:
             return 0, {}
         
         traffic = result['value']

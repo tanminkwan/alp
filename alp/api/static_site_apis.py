@@ -10,3 +10,8 @@ def nogame_page():
 def dashboard_page(event_id):
     
     return render_template('dashboard.html',event_id=event_id)
+
+@app.route('/command')
+def command_page():
+    
+    return render_template('command.html')

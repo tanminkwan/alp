@@ -65,6 +65,8 @@ spec:
         prefix: /static
     - uri:
         prefix: /dashboard
+    - uri:
+        prefix: /command
     route:
     - destination:
         host: static-site
