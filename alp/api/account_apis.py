@@ -8,13 +8,13 @@ from datetime import timedelta
 import uuid
 import json
 import logging
-
+    
 class Accounts(Resource):
 
     parser = reqparse.RequestParser()
     parser.add_argument('user_name', type=str)
     #parser.add_argument('account_id', type=str)
-    
+
     def get(self, event_id):
 
         param = dict(
